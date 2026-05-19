@@ -10,5 +10,13 @@
   "repository": "https://github.com/argami/massive-skill",
   "license": "MIT",
   "keywords": ["web", "fetch", "search", "browser", "scraping", "ai"],
-  "skills": ["skills/massive/SKILL.md"]
+  "userConfig": {
+    "massive_token": {
+      "type": "string",
+      "title": "Massive API Token",
+      "description": "Your Massive API token from partners.joinmassive.com",
+      "sensitive": true,
+      "required": true
+    }
+  }
 }
