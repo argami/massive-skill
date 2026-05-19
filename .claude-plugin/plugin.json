@@ -10,6 +10,7 @@
   "repository": "https://github.com/argami/massive-skill",
   "license": "MIT",
   "keywords": ["web", "fetch", "search", "browser", "scraping", "ai"],
+  "skills": ["skills/massive/SKILL.md"],
   "userConfig": {
     "massive_token": {
       "type": "string",
