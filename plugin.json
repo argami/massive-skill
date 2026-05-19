@@ -1,0 +1,14 @@
+{
+  "name": "massive",
+  "version": "0.1.0",
+  "description": "Fetch URLs, search Google, or query AI chatbots through Massive's Web Render API. Handles JavaScript rendering, CAPTCHAs, and 195+ country geo-targeting.",
+  "author": {
+    "name": "Massive",
+    "url": "https://joinmassive.com"
+  },
+  "homepage": "https://github.com/argami/massive-skill",
+  "repository": "https://github.com/argami/massive-skill",
+  "license": "MIT",
+  "keywords": ["web", "fetch", "search", "browser", "scraping", "ai"],
+  "skills": ["skills/massive/SKILL.md"]
+}
