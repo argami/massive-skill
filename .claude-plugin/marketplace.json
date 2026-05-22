@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "massive-skill",
+  "owner": {
+    "name": "Massive",
+    "email": "support@joinmassive.com"
+  },
+  "metadata": {
+    "description": "Fetch URLs, search Google, or query AI chatbots through Massive's Web Render API",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "massive",
+      "source": "./",
+      "description": "Fetch URLs, search Google, or query AI chatbots (ChatGPT, Gemini, Perplexity, Copilot) through Massive's Web Render API. Handles JavaScript rendering, CAPTCHAs, and 195+ country geo-targeting.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Massive",
+        "url": "https://joinmassive.com"
+      },
+      "category": "web",
+      "keywords": ["web", "fetch", "search", "browser", "scraping", "ai"],
+      "homepage": "https://github.com/argami/massive-skill",
+      "strict": false
+    }
+  ]
+}

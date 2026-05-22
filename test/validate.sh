@@ -45,6 +45,26 @@ else
   fail "userConfig.massive_token missing"
 fi
 
+# marketplace.json
+MARKETPLACE_JSON="$ROOT/.claude-plugin/marketplace.json"
+if [[ -f "$MARKETPLACE_JSON" ]]; then
+  pass "marketplace.json exists"
+else
+  fail "marketplace.json missing"
+fi
+
+if jq empty "$MARKETPLACE_JSON" 2>/dev/null; then
+  pass "marketplace.json is valid JSON"
+else
+  fail "marketplace.json is not valid JSON"
+fi
+
+if jq -e '.plugins[0].name == "massive"' "$MARKETPLACE_JSON" > /dev/null 2>&1; then
+  pass "marketplace.json declares massive plugin"
+else
+  fail "marketplace.json missing massive plugin entry"
+fi
+
 # skills/ directory is auto-discovered by Claude Code
 if [[ -d "$ROOT/skills/massive" ]]; then
   pass "skills/massive directory exists (auto-discovered)"

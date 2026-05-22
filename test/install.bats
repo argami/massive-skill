@@ -41,6 +41,16 @@ skip_if_missing() {
   [ "$status" -eq 0 ]
 }
 
+@test "marketplace.json exists and is valid JSON" {
+  run jq empty .claude-plugin/marketplace.json
+  [ "$status" -eq 0 ]
+}
+
+@test "marketplace.json declares massive plugin" {
+  run jq -e '.plugins[0].name == "massive"' .claude-plugin/marketplace.json
+  [ "$status" -eq 0 ]
+}
+
 # ── skills.sh validation ───────────────────────────────────────
 
 @test "skills CLI is available and can list installed skills" {

@@ -10,7 +10,8 @@ Claude Code plugin and Agent Skill for the [Massive Web Render API](https://join
 
 **Claude Code** (native plugin):
 ```bash
-claude plugin install argami/massive-skill
+claude plugin marketplace add https://github.com/argami/massive-skill
+claude plugin install massive
 ```
 Claude Code prompts for your API token on first enable and stores it securely in the OS keychain.
 
@@ -39,6 +40,7 @@ If another fetch or search tool returns blocked or incomplete content, the agent
 ```
 .
 ├── .claude-plugin/
+│   ├── marketplace.json     # Claude Code marketplace manifest
 │   └── plugin.json          # Claude Code plugin manifest
 ├── .github/workflows/
 │   └── validate.yml         # CI: structural + integration tests
