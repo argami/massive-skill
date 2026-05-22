@@ -51,8 +51,8 @@ If another fetch or search tool returns blocked or incomplete content, the agent
 │       ├── search.md        # /search endpoint reference
 │       └── ai.md            # /ai endpoint reference
 ├── test/
-│   ├── validate.sh          # 21 structural checks (shell)
-│   └── install.bats         # 11 integration tests (bats)
+│   ├── validate.sh          # 24 structural checks (shell)
+│   └── install.bats         # 12 integration + E2E tests (bats)
 ├── .pre-commit-config.yaml
 └── README.md
 ```
@@ -61,7 +61,7 @@ If another fetch or search tool returns blocked or incomplete content, the agent
 
 ### Pre-commit hooks
 
-Pre-commit runs `validate.sh` and `bats` tests on every commit. Install:
+Pre-commit runs both test suites on every commit. Install:
 
 ```bash
 brew install pre-commit bats-core
@@ -71,18 +71,28 @@ pre-commit install
 ### Running tests locally
 
 ```bash
-# Structural validation — 21 checks covering plugin.json, SKILL.md,
-# directory structure, reference files, and link integrity
+# Structural validation — 24 checks
 bash test/validate.sh
+```
 
-# Bats integration tests — 11 checks covering plugin validation,
-# skills CLI, YAML frontmatter, and file presence
+Covers `plugin.json`, `marketplace.json`, `SKILL.md` frontmatter, directory structure, reference files, and link integrity.
+
+```bash
+# Integration + E2E tests — 12 checks
 bats test/install.bats
 ```
 
+| # | Test | What it verifies |
+|---|---|---|
+| 1–10 | Structural | JSON schemas, required fields, YAML frontmatter, reference files |
+| 11 | **Claude Code E2E** | `marketplace add` → `install massive` → `list` (must show `massive`) → `uninstall` → `marketplace remove` |
+| 12 | **skills.sh E2E** | `skills add <git-url> --global` → `list --global` (must show `massive-skill`) → `uninstall --global` |
+
+Tests 11 and 12 validate the commands users actually run from the README — if either fails, the plugin or skill is not installable.
+
 ### CI
 
-GitHub Actions runs the full suite on every push and PR to `main`. Workflow installs `skills-cli` and `@anthropic-ai/claude-code` from npm for complete CLI coverage.
+GitHub Actions runs both suites on every push and PR to `main`. The workflow installs `skills-cli` and `@anthropic-ai/claude-code` from npm so the E2E install tests run with real CLIs.
 
 ## License
 
