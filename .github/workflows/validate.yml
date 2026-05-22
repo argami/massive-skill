@@ -12,10 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq bats
+
+      - name: Install skills CLI
+        run: npm install -g skills-cli
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Structural validation
         run: bash test/validate.sh
