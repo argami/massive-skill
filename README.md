@@ -44,6 +44,37 @@ curl -H "Authorization: Bearer $MASSIVE_TOKEN" \
   'https://render.joinmassive.com/ai?prompt=best+coffee+shops&model=chatgpt'
 ```
 
+## Development
+
+### Pre-commit hooks
+
+Pre-commit runs `validate.sh` and `bats` tests on every commit. Install:
+
+```bash
+brew install pre-commit bats-core
+pre-commit install
+```
+
+### Running tests locally
+
+```bash
+# Structural validation (21 checks)
+bash test/validate.sh
+
+# Bats integration tests (11 checks)
+bats test/install.bats
+```
+
+Tests validate:
+- `plugin.json` structure, required fields, and sensitive token config
+- `SKILL.md` YAML frontmatter and reference link integrity
+- Directory structure and reference files (browser, search, ai)
+- `claude plugin validate` and `skills` CLI availability
+
+### CI
+
+GitHub Actions runs the full suite on every push and PR to `main`.
+
 ## License
 
 MIT
