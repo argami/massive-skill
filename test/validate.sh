@@ -45,11 +45,11 @@ else
   fail "userConfig.massive_token missing"
 fi
 
-# skills declaration
-if jq -e '.skills' "$PLUGIN_JSON" > /dev/null 2>&1; then
-  pass "skills field declared in plugin.json"
+# skills/ directory is auto-discovered by Claude Code
+if [[ -d "$ROOT/skills/massive" ]]; then
+  pass "skills/massive directory exists (auto-discovered)"
 else
-  fail "skills field missing from plugin.json"
+  fail "skills/massive directory missing"
 fi
 
 echo ""
