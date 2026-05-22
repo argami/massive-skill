@@ -6,21 +6,13 @@ setup() {
   cd "$ROOT"
 }
 
-# ── Helper: skip if CLI not found ──────────────────────────────
-
 skip_if_missing() {
   if ! command -v "$1" &>/dev/null; then
     skip "$1 not available in this environment"
   fi
 }
 
-# ── Claude Code plugin validation ──────────────────────────────
-
-@test "claude plugin validate passes" {
-  skip_if_missing claude
-  run claude plugin validate .
-  [ "$status" -eq 0 ]
-}
+# ── Structural checks ──────────────────────────────────────────
 
 @test "plugin.json exists and is valid JSON" {
   run jq empty .claude-plugin/plugin.json
@@ -51,30 +43,17 @@ skip_if_missing() {
   [ "$status" -eq 0 ]
 }
 
-# ── skills.sh validation ───────────────────────────────────────
-
-@test "skills CLI is available and can list installed skills" {
-  skip_if_missing skills
-  run skills list
-  [ "$status" -eq 0 ]
-}
-
 @test "SKILL.md exists and has YAML frontmatter" {
   run head -1 skills/massive/SKILL.md
   [ "$output" = "---" ]
 }
 
-@test "SKILL.md frontmatter has name field" {
+@test "SKILL.md frontmatter has name and description" {
   run grep -q '^name:' skills/massive/SKILL.md
   [ "$status" -eq 0 ]
-}
-
-@test "SKILL.md frontmatter has description field" {
   run grep -q '^description:' skills/massive/SKILL.md
   [ "$status" -eq 0 ]
 }
-
-# ── Reference files ────────────────────────────────────────────
 
 @test "all reference files present" {
   for ref in browser.md search.md ai.md; do
@@ -88,8 +67,59 @@ skip_if_missing() {
   done < <(sed -n 's/.*](\(references\/[^)]*\)).*/\1/p' skills/massive/SKILL.md)
 }
 
-# ── README ─────────────────────────────────────────────────────
-
 @test "README.md exists" {
   [ -f "README.md" ]
+}
+
+# ── Claude Code plugin E2E install test ────────────────────────
+
+@test "claude plugin marketplace-add + install + verify + cleanup" {
+  skip_if_missing claude
+
+  # Clean up from any previous failed test run
+  claude plugin uninstall massive 2>/dev/null || true
+  claude plugin marketplace remove massive-skill 2>/dev/null || true
+
+  # Add repo as marketplace (must use absolute path)
+  run claude plugin marketplace add "$ROOT"
+  [ "$status" -eq 0 ]
+
+  # Install the plugin
+  run claude plugin install massive
+  [ "$status" -eq 0 ]
+
+  # Verify it appears in the installed list
+  run claude plugin list
+  [ "$status" -eq 0 ]
+  [[ "$output" =~ massive ]]
+
+  # Cleanup
+  run claude plugin uninstall massive
+  [ "$status" -eq 0 ]
+  run claude plugin marketplace remove massive-skill
+  [ "$status" -eq 0 ]
+}
+
+# ── skills.sh E2E install test ─────────────────────────────────
+
+@test "skills add + verify + cleanup from git URL" {
+  skip_if_missing skills
+
+  # Clean up from any previous failed test run
+  skills uninstall massive-skill --global 2>/dev/null || true
+
+  local remote
+  remote=$(git remote get-url origin)
+
+  run skills add "$remote" --global --skip-setup
+  [ "$status" -eq 0 ]
+
+  # Verify it appears in the global installed list
+  run skills list --global
+  [ "$status" -eq 0 ]
+  [[ "$output" =~ massive-skill ]]
+
+  # Cleanup
+  run skills uninstall massive-skill --global
+  [ "$status" -eq 0 ]
 }
