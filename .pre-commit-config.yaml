@@ -5,12 +5,12 @@ repos:
         name: Validate plugin & skill structure
         entry: bash test/validate.sh
         language: system
-        files: '^(\.claude-plugin/plugin\.json|skills/|README\.md|test/validate\.sh)$'
+        files: '^(\.claude-plugin/(plugin|marketplace)\.json|skills/|README\.md|test/validate\.sh)$'
         pass_filenames: false
 
       - id: bats-tests
         name: Bats integration tests
         entry: bats test/install.bats
         language: system
-        files: '^(\.claude-plugin/|skills/|test/|README\.md)$'
+        files: '^(\.claude-plugin/|skills/|test/|README\.md)'
         pass_filenames: false
